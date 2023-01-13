@@ -106,10 +106,13 @@ public class HelloApplication extends Application {
 
         if (intersects(ball, playerRect)) {
             double totalHeight = 2*ball.getRadius() + playerRect.getHeight();
-            ballAngle += PI;
+            double heightDifference = ball.getCenterY()  + ball.getRadius() - playerRect.getY();
+            ballAngle  = 3 * PI / 4 + PI/2 * heightDifference / totalHeight;
 
         } else if (intersects(ball, botRect)) {
-            ballAngle += PI;
+            double totalHeight = 2*ball.getRadius() + botRect.getHeight();
+            double heightDifference = ball.getCenterY()  + ball.getRadius() - botRect.getY();
+            ballAngle  = 1 * PI / 4 - PI/2 * heightDifference / totalHeight;
         }
     }
     boolean intersects(Circle ball, Rectangle rect)
