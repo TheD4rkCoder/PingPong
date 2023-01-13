@@ -142,7 +142,11 @@ public class HelloApplication extends Application {
     }
 
     void moveBot(Rectangle botRect, Circle ball) {
-
+        if (botRect.getY() + botRect.getHeight()/3 > ball.getCenterY()) {
+            botRect.setY(botRect.getY()-4);
+        } else if (botRect.getY() + botRect.getHeight()*2/3 < ball.getCenterY()) {
+            botRect.setY(botRect.getY()+4);
+        }
     }
 
     void moveBall(Circle ball) {
