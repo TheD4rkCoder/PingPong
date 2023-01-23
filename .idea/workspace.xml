@@ -31,7 +31,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/Fabian/Desktop/Oberschule/4AT/Informatik/Java/favafx_calculator"
+    "last_opened_file_path": "C:/Users/Fabian/Desktop/Oberschule/4AT/Informatik/Java/PingPong"
   }
 }]]></component>
   <component name="RunManager">
@@ -66,6 +66,7 @@
       <workItem from="1673602682042" duration="1206000" />
       <workItem from="1673688023911" duration="629000" />
       <workItem from="1673785687181" duration="22000" />
+      <workItem from="1674483243935" duration="1410000" />
     </task>
     <task id="LOCAL-00001" summary="initial">
       <created>1673422970600</created>
@@ -88,7 +89,14 @@
       <option name="project" value="LOCAL" />
       <updated>1673603588144</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="ball shoot rework">
+      <created>1674483262313</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1674483262313</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -19,6 +19,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -35,10 +36,18 @@ public class HelloApplication extends Application {
     Label score;
 
     Rectangle playerRect, botRect, background;
+    boolean pvp;
 
 
     @Override
     public void start(Stage stage) throws IOException {
+        pvp = false;
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                System.exit(0);
+            }
+        });
         Group group = new Group();
         background = new Rectangle(800, 500);
         background.setFill(Paint.valueOf("green"));
@@ -83,9 +92,15 @@ public class HelloApplication extends Application {
                     keysPressed[0] = true;
                 } else if (keyEvent.getCode() == KeyCode.DOWN) {
                     keysPressed[1] = true;
+                }else if (keyEvent.getCode() == KeyCode.W) {
+                    keysPressed[2] = true;
+                }else if (keyEvent.getCode() == KeyCode.S) {
+                    keysPressed[3] = true;
                 } else if (keyEvent.getCode() == KeyCode.Q) {
                     Platform.exit();
-                } else if (keyEvent.getCode() == KeyCode.R) {
+                } else if (keyEvent.getCode() == KeyCode.M) {
+                    pvp = !pvp;
+                }else if (keyEvent.getCode() == KeyCode.R) {
                     ball.setCenterX(400);
                     ball.setCenterY(250);
                     timeline.play();
@@ -99,6 +114,10 @@ public class HelloApplication extends Application {
                     keysPressed[0] = false;
                 } else if (keyEvent.getCode() == KeyCode.DOWN) {
                     keysPressed[1] = false;
+                }else if (keyEvent.getCode() == KeyCode.W) {
+                    keysPressed[2] = false;
+                }else if (keyEvent.getCode() == KeyCode.S) {
+                    keysPressed[3] = false;
                 }
             }
         });
@@ -107,14 +126,12 @@ public class HelloApplication extends Application {
         stage.show();
 
 
-        KeyFrame keyFrame = new KeyFrame(new Duration(50),
-                event -> {
+        KeyFrame keyFrame = new KeyFrame(new Duration(50), event -> {
                     movePlayer();
                     moveBot(ball);
                     moveBall(ball);
                     ballCollision(ball);
-                }
-        );
+                });
 
         timeline = new Timeline(keyFrame);
         timeline.setCycleCount(Timeline.INDEFINITE);
@@ -159,10 +176,19 @@ public class HelloApplication extends Application {
     }
 
     void moveBot(Circle ball) {
-        if (botRect.getY() + botRect.getHeight()/3 > ball.getCenterY()) {
-            botRect.setY(botRect.getY()-4);
-        } else if (botRect.getY() + botRect.getHeight()*2/3 < ball.getCenterY()) {
-            botRect.setY(botRect.getY()+4);
+        if(pvp){
+            if (keysPressed[2] && botRect.getY() > 20) {
+                botRect.setY(botRect.getY() - 4);
+            }
+            if (keysPressed[3] && botRect.getY() + botRect.getHeight() + 20 < scene.getHeight()) {
+                botRect.setY(botRect.getY() + 4);
+            }
+        }else{
+            if (botRect.getY() + botRect.getHeight()/3 > ball.getCenterY()) {
+                botRect.setY(botRect.getY()-4);
+            } else if (botRect.getY() + botRect.getHeight()*2/3 < ball.getCenterY()) {
+                botRect.setY(botRect.getY()+4);
+            }
         }
     }
 
@@ -171,7 +197,6 @@ public class HelloApplication extends Application {
             if (ball.getCenterX() < 10) {
                 ++scores[1];
                 ballAngle = PI;
-                return;
             }else if(ball.getCenterX() > 810) {
                 ++scores[0];
                 ballAngle = 0;
