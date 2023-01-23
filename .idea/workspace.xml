@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7d104064-0a20-42e5-bbcd-a25e9fb0ce7e" name="Changes" comment="ball shoot rework">
+    <list default="true" id="7d104064-0a20-42e5-bbcd-a25e9fb0ce7e" name="Changes" comment="pvp">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/pingpong/HelloApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/pingpong/HelloApplication.java" afterDir="false" />
     </list>
@@ -66,7 +66,7 @@
       <workItem from="1673602682042" duration="1206000" />
       <workItem from="1673688023911" duration="629000" />
       <workItem from="1673785687181" duration="22000" />
-      <workItem from="1674483243935" duration="1410000" />
+      <workItem from="1674483243935" duration="4953000" />
     </task>
     <task id="LOCAL-00001" summary="initial">
       <created>1673422970600</created>
@@ -96,7 +96,14 @@
       <option name="project" value="LOCAL" />
       <updated>1674483262313</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="pvp">
+      <created>1674484893889</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1674484893889</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -117,6 +124,7 @@
     <MESSAGE value="initial" />
     <MESSAGE value="kind of works" />
     <MESSAGE value="ball shoot rework" />
-    <option name="LAST_COMMIT_MESSAGE" value="ball shoot rework" />
+    <MESSAGE value="pvp" />
+    <option name="LAST_COMMIT_MESSAGE" value="pvp" />
   </component>
 </project>

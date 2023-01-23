@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -36,7 +37,10 @@ public class HelloApplication extends Application {
     Label score;
 
     Rectangle playerRect, botRect, background;
+    Circle ball;
     boolean pvp;
+    double w = 0, h = 0;
+    Stage stage;
 
 
     @Override
@@ -48,33 +52,34 @@ public class HelloApplication extends Application {
                 System.exit(0);
             }
         });
+        this.stage = stage;
+        w = 800;
+        h = 500;
         Group group = new Group();
-        background = new Rectangle(800, 500);
+        background = new Rectangle(w, h);
         background.setFill(Paint.valueOf("green"));
-        background.setStroke(Paint.valueOf("blue"));
-        background.setStrokeWidth(20);
-        background.setX(10);
-        background.setY(10);
+        background.setX(0);
+        background.setY(0);
         group.getChildren().add(background);
         playerRect = new Rectangle(20, 100);
         playerRect.setFill(Paint.valueOf("yellow"));
         playerRect.setStroke(Paint.valueOf("black"));
         playerRect.setStrokeWidth(5);
-        playerRect.setX(770);
-        playerRect.setY(100);
+        playerRect.setX(w - 40);
+        playerRect.setY(h/2 - 50);
         group.getChildren().add(playerRect);
 
         botRect = new Rectangle(20, 100);
         botRect.setFill(Paint.valueOf("red"));
         botRect.setStroke(Paint.valueOf("black"));
         botRect.setStrokeWidth(5);
-        botRect.setX(30);
-        botRect.setY(200);
+        botRect.setX(10);
+        botRect.setY(h/2 - 50);
         group.getChildren().add(botRect);
 
-        Circle ball = new Circle(20, Paint.valueOf("white"));
-        ball.setCenterX(400);
-        ball.setCenterY(250);
+        ball = new Circle(20, Paint.valueOf("white"));
+        ball.setCenterX(w/2);
+        ball.setCenterY(h/2);
         group.getChildren().add(ball);
 
         score = new Label("0:0");
@@ -127,6 +132,7 @@ public class HelloApplication extends Application {
 
 
         KeyFrame keyFrame = new KeyFrame(new Duration(50), event -> {
+                    changeValues();
                     movePlayer();
                     moveBot(ball);
                     moveBall(ball);
@@ -136,6 +142,24 @@ public class HelloApplication extends Application {
         timeline = new Timeline(keyFrame);
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+    }
+    void changeValues(){
+        double newW = stage.getWidth();
+        double newH = stage.getHeight();
+        if(h == newH && w == newW){
+            return;
+        }
+        ball.setCenterX(ball.getCenterX()/w*newW);
+        ball.setCenterY(ball.getCenterY()/h*newH);
+        background.setWidth(newW);
+        background.setHeight(newH);
+        playerRect.setX(playerRect.getX()/w*newW);
+        playerRect.setY(playerRect.getY()/h*newH);
+        botRect.setX(botRect.getX()/w*newW);
+        botRect.setY(botRect.getY()/h*newH);
+        score.setLayoutX(newW/2);
+        w = newW;
+        h = newH;
     }
 
     void ballCollision(Circle ball) {
@@ -193,16 +217,16 @@ public class HelloApplication extends Application {
     }
 
     void moveBall(Circle ball) {
-        if(ball.getCenterX() < 10 || ball.getCenterX() > 810){
-            if (ball.getCenterX() < 10) {
+        if(ball.getCenterX() < 0 || ball.getCenterX() > w){
+            if (ball.getCenterX() < 0) {
                 ++scores[1];
                 ballAngle = PI;
-            }else if(ball.getCenterX() > 810) {
+            }else if(ball.getCenterX() > w) {
                 ++scores[0];
                 ballAngle = 0;
             }
-            playerRect.setY(background.getHeight()/2 + 10 - playerRect.getHeight()/2);
-            botRect.setY(background.getHeight()/2 + 10 - playerRect.getHeight()/2);
+            playerRect.setY(background.getHeight()/2 - playerRect.getHeight()/2);
+            botRect.setY(background.getHeight()/2 - playerRect.getHeight()/2);
             timeline.pause();
             score.setText(scores[0] + ":" + scores[1]);
             return;
@@ -214,8 +238,8 @@ public class HelloApplication extends Application {
         if (newPosY - ball.getRadius() < 0) {
             newPosY = -newPosY + 2 * ball.getRadius();
             ballAngle = 2 * PI - ballAngle;
-        } else if (newPosY + ball.getRadius() > 520) {
-            newPosY = 1040 - 2 * ball.getRadius() - newPosY;
+        } else if (newPosY + ball.getRadius() > h - 30) {
+            newPosY = (h - 30) * 2 - 2 * ball.getRadius() - newPosY;
             ballAngle = 2 * PI - ballAngle;
         }
         ball.setCenterX(newPosX);
