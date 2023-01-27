@@ -24,6 +24,8 @@ import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.security.Key;
+import java.util.Random;
 
 import static java.lang.Math.*;
 
@@ -42,6 +44,9 @@ public class HelloApplication extends Application {
     double w = 0, h = 0;
     Stage stage;
 
+    int ballSpeed = 10, playerSpeed = 4;
+
+    Rectangle[] obstacles;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -53,6 +58,8 @@ public class HelloApplication extends Application {
             }
         });
         this.stage = stage;
+        stage.setMinHeight(500);
+        stage.setMinWidth(1000);
         w = 800;
         h = 500;
         Group group = new Group();
@@ -131,6 +138,21 @@ public class HelloApplication extends Application {
         stage.show();
 
 
+        int amountOfObstacles = 3;
+        obstacles = new Rectangle[amountOfObstacles];
+        Random rand = new Random();
+        for(int i = 0; i < 3; ++i){
+            obstacles[i] = new Rectangle(20, 100);
+            obstacles[i].setY(rand.nextDouble(0, stage.getHeight() - 100));
+            obstacles[i].setX(rand.nextDouble(100, stage.getWidth() - 100));
+            obstacles[i].setFill(Paint.valueOf("gray"));
+            obstacles[i].setStroke(Paint.valueOf("black"));
+            obstacles[i].setStrokeWidth(5);
+
+            group.getChildren().add(obstacles[i]);
+        }
+
+
         KeyFrame keyFrame = new KeyFrame(new Duration(50), event -> {
                     changeValues();
                     movePlayer();
@@ -142,6 +164,16 @@ public class HelloApplication extends Application {
         timeline = new Timeline(keyFrame);
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+
+        Timeline t = new Timeline(new KeyFrame(new Duration(10000), event -> {
+            ballSpeed += 2;
+            playerSpeed += 1;
+        }));
+        t.setCycleCount(Timeline.INDEFINITE);
+        t.play();
+
+
+
     }
     void changeValues(){
         double newW = stage.getWidth();
@@ -172,7 +204,24 @@ public class HelloApplication extends Application {
             double totalHeight = 2*ball.getRadius() + botRect.getHeight();
             double heightDifference = ball.getCenterY()  + ball.getRadius() - botRect.getY();
             ballAngle  = PI / 4 - PI/2 * heightDifference / totalHeight;
-        }
+        }/*else{
+            for(Rectangle i : obstacles){
+                if(intersects(ball, i)){
+                    double totalHeight = 2*ball.getRadius() + i.getHeight();
+                    double heightDifference = ball.getCenterY()  + ball.getRadius() - i.getY();
+                    if(ballAngle % 2* PI > PI / 2 && ballAngle % 2* PI < 3 * PI / 2 ) {
+                        ballAngle = 3 * PI / 4 - PI / 2 * heightDifference / totalHeight;
+                    }else{
+                        ballAngle  = PI / 4 + PI/2 * heightDifference / totalHeight;
+                    }
+                    if(ballAngle < PI/2){
+                        if(ball.getCenterX() > i.getX()){
+                            ballAngle = 2 * PI - ballAngle;
+                        }
+                    }
+                }
+            }
+        }//*/
     }
 
     boolean intersects(Circle ball, Rectangle rect) {
@@ -192,26 +241,26 @@ public class HelloApplication extends Application {
 
     void movePlayer() {
         if (keysPressed[0] && playerRect.getY() > 20) {
-            playerRect.setY(playerRect.getY() - 4);
+            playerRect.setY(playerRect.getY() - playerSpeed);
         }
         if (keysPressed[1] && playerRect.getY() + playerRect.getHeight() + 20 < scene.getHeight()) {
-            playerRect.setY(playerRect.getY() + 4);
+            playerRect.setY(playerRect.getY() + playerSpeed);
         }
     }
 
     void moveBot(Circle ball) {
         if(pvp){
             if (keysPressed[2] && botRect.getY() > 20) {
-                botRect.setY(botRect.getY() - 4);
+                botRect.setY(botRect.getY() - playerSpeed);
             }
             if (keysPressed[3] && botRect.getY() + botRect.getHeight() + 20 < scene.getHeight()) {
-                botRect.setY(botRect.getY() + 4);
+                botRect.setY(botRect.getY() + playerSpeed);
             }
         }else{
             if (botRect.getY() + botRect.getHeight()/3 > ball.getCenterY()) {
-                botRect.setY(botRect.getY()-4);
+                botRect.setY(botRect.getY() - playerSpeed);
             } else if (botRect.getY() + botRect.getHeight()*2/3 < ball.getCenterY()) {
-                botRect.setY(botRect.getY()+4);
+                botRect.setY(botRect.getY() + playerSpeed);
             }
         }
     }
@@ -229,11 +278,13 @@ public class HelloApplication extends Application {
             botRect.setY(background.getHeight()/2 - playerRect.getHeight()/2);
             timeline.pause();
             score.setText(scores[0] + ":" + scores[1]);
+            ballSpeed = 10;
+            playerSpeed = 4;
             return;
         }
 
-        double newPosX = ball.getCenterX() + cos(ballAngle) * 10;
-        double newPosY = ball.getCenterY() - sin(ballAngle) * 10;
+        double newPosX = ball.getCenterX() + cos(ballAngle) * ballSpeed;
+        double newPosY = ball.getCenterY() - sin(ballAngle) * ballSpeed;
 
         if (newPosY - ball.getRadius() < 0) {
             newPosY = -newPosY + 2 * ball.getRadius();
